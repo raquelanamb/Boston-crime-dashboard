@@ -4,6 +4,7 @@ import numpy as np
 import requests
 from datetime import datetime, timedelta
 import altair as alt
+import pydeck as pdk
 
 # streamlit setup:
 st.set_page_config(page_title="Boston Crime Insights", layout="wide")
@@ -182,6 +183,37 @@ heatmap = alt.Chart(heat).mark_rect().encode(
 ).properties(height=300)
 
 st.altair_chart(heatmap, use_container_width=True)
+
+# crime map:
+st.subheader("Crime Map")
+
+crime_map = pdk.Deck(
+    map_style="mapbox://styles/mapbox/dark-v11",
+    initial_view_state=pdk.ViewState(
+        latitude=df_f["Lat"].mean(),
+        longitude=df_f["Long"].mean(),
+        zoom=11,
+        pitch=45,
+    ),
+    layers=[
+        pdk.Layer(
+            "HeatmapLayer",
+            data=df_f.dropna(subset=["Lat", "Long"]),
+            get_position=["Long", "Lat"],
+            get_weight=1,
+            radiusPixels=30,
+        ),
+        pdk.Layer(
+            "ScatterplotLayer",
+            data=df_f.dropna(subset=["Lat", "Long"]),
+            get_position=["Long", "Lat"],
+            get_color=[255, 0, 0, 100],
+            get_radius=40,
+        ),
+    ],
+)
+
+st.pydeck_chart(crime_map)
 
 
 # top offenses (bar chart):
