@@ -10,7 +10,6 @@ st.set_page_config(page_title="Boston Crime Insights", layout="wide")
 st.title("Boston Crime Dashboard")
 st.subheader("(Explore official BPD data crime incident reports from 2015 to present)")
 
-
 # Boston dataset API (updated daily):
 RESOURCE_ID = "b973d8cb-eeb2-4e7e-99da-c92938efc9c0"
 API_URL = f"https://data.boston.gov/api/3/action/datastore_search?resource_id={RESOURCE_ID}&limit=500000"
@@ -40,10 +39,10 @@ def load_data():
         st.error("No data files could be loaded from Oracle Cloud.")
         st.stop()
 
-    # Combine everything
+    # combine everything:
     df = pd.concat(dfs, ignore_index=True)
 
-    # Normalize date strings before parsing
+    # normalize date strings before parsing:
     df["OCCURRED_ON_DATE"] = (
         df["OCCURRED_ON_DATE"]
         .astype(str)
@@ -163,7 +162,7 @@ line = alt.Chart(ts).mark_line().encode(
 st.altair_chart(line, use_container_width=True)
 
 
-# heatmap: crime by hour & day:
+# heatmap of crime by hour & day:
 st.subheader("Crime Heatmap")
 
 df_f["DAY_OF_WEEK"] = df_f["OCCURRED_ON_DATE"].dt.day_name()
@@ -209,8 +208,6 @@ crime_chart = (
 st.altair_chart(crime_chart, use_container_width=True)
 
 
-
-
 # district activity:
 st.subheader("Crime by Police District")
 
@@ -224,8 +221,6 @@ else:
         .reset_index(name="Count")
     )
 
-
-    import altair as alt
     district_chart = (
         alt.Chart(by_district)
         .mark_bar()
@@ -237,7 +232,6 @@ else:
     )
 
     st.altair_chart(district_chart, use_container_width=True)
-
 
 
 # shooting analysis:
