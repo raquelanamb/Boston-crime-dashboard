@@ -8,7 +8,7 @@ import altair as alt
 # streamlit setup:
 st.set_page_config(page_title="Boston Crime Insights", layout="wide")
 st.title("Boston Crime Dashboard")
-st.subheader("(Explore official data from 2015 to present)")
+st.subheader("(Explore official BPD data crime incident reports from 2015 to present)")
 
 
 # Boston dataset API (updated daily):
