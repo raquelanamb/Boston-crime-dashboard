@@ -235,7 +235,7 @@ else:
 
     st.altair_chart(district_chart, use_container_width=True)
 
-
+'''
 # crimes + police districts map:
 st.subheader("Crime Map with Police Districts")
 st.info("(Uses a random sample of 20,000 points)")
@@ -266,6 +266,7 @@ if "LAT" in df.columns and "LONG" in df.columns:
     st.altair_chart(crime_map, use_container_width=True)
 else:
     st.warning("Latitude/Longitude columns not found in dataset.")
+'''
 
 
 # shooting analysis:
