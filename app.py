@@ -264,32 +264,38 @@ else:
 
 # crimes + police districts map:
 st.subheader("Crime Map with Police Districts")
-st.info("(Uses a random sample of 20,000 points)")
 
 if "LAT" in df_f_nodist.columns and "LONG" in df_f_nodist.columns:
-        
-    # downsample for performance:
-    df_map = df_f_nodist.sample(20000, random_state=42)
+    
+    if len(df_f_nodist) == 0:
+        st.warning("No map data available for the selected filters.")
+    else:
+        # downsample safely
+        if len(df_f_nodist) > 20000:
+            df_map = df_f_nodist.sample(20000, random_state=42)
+            st.info("(Showing a random sample of 20,000 points for performance.)")
+        else:
+            df_map = df_f_nodist.copy()
 
-    crime_map = (
-        alt.Chart(df_map.dropna(subset=["LAT", "LONG"]))
-        .mark_circle(size=35, opacity=0.5)
-        .encode(
-            longitude="LONG:Q",
-            latitude="LAT:Q",
-            color=alt.Color("DISTRICT:N", legend=None),
-            tooltip=[
-                alt.Tooltip("DISTRICT:N", title="District"),
-                alt.Tooltip("OFFENSE_DESCRIPTION:N", title="Crime Type"),
-                alt.Tooltip("DAY_OF_WEEK:N", title="Day of Week"),
-                alt.Tooltip("HOUR:Q", title="Hour of Day"),
-            ],
+        crime_map = (
+            alt.Chart(df_map.dropna(subset=["LAT", "LONG"]))
+            .mark_circle(size=35, opacity=0.5)
+            .encode(
+                longitude="LONG:Q",
+                latitude="LAT:Q",
+                color=alt.Color("DISTRICT:N", legend=None),
+                tooltip=[
+                    alt.Tooltip("DISTRICT:N", title="District"),
+                    alt.Tooltip("OFFENSE_DESCRIPTION:N", title="Crime Type"),
+                    alt.Tooltip("DAY_OF_WEEK:N", title="Day of Week"),
+                    alt.Tooltip("HOUR:Q", title="Hour of Day"),
+                ],
+            )
+            .properties(width="container", height=500)
+            .interactive()
         )
-        .properties(width="container", height=500)
-        .interactive()  # allows zooming & panning
-    )
 
-    st.altair_chart(crime_map, use_container_width=True)
+        st.altair_chart(crime_map, use_container_width=True)
 else:
     st.warning("Latitude/Longitude columns not found in dataset.")
 
