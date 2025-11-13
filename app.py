@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import altair as alt
 import pydeck as pdk
 
+
 # streamlit setup:
 st.set_page_config(page_title="Boston Crime Insights", layout="wide")
 st.title("Boston Crime Dashboard")
@@ -184,37 +185,6 @@ heatmap = alt.Chart(heat).mark_rect().encode(
 
 st.altair_chart(heatmap, use_container_width=True)
 
-# crime map:
-st.subheader("Crime Map")
-
-crime_map = pdk.Deck(
-    map_style="mapbox://styles/mapbox/dark-v11",
-    initial_view_state=pdk.ViewState(
-        latitude=df_f["Lat"].mean(),
-        longitude=df_f["Long"].mean(),
-        zoom=11,
-        pitch=45,
-    ),
-    layers=[
-        pdk.Layer(
-            "HeatmapLayer",
-            data=df_f.dropna(subset=["Lat", "Long"]),
-            get_position=["Long", "Lat"],
-            get_weight=1,
-            radiusPixels=30,
-        ),
-        pdk.Layer(
-            "ScatterplotLayer",
-            data=df_f.dropna(subset=["Lat", "Long"]),
-            get_position=["Long", "Lat"],
-            get_color=[255, 0, 0, 100],
-            get_radius=40,
-        ),
-    ],
-)
-
-st.pydeck_chart(crime_map)
-
 
 # top offenses (bar chart):
 st.subheader("Top 20 Crimes")
@@ -264,6 +234,38 @@ else:
     )
 
     st.altair_chart(district_chart, use_container_width=True)
+
+
+# crimes + police districts map:
+st.subheader("Crime Map with Police Districts")
+st.info("(Uses a random sample of 20,000 points)")
+
+if "LAT" in df_f.columns and "LONG" in df_f.columns:
+        
+    # downsample for performance:
+    df_map = df_f.sample(20000, random_state=42)
+
+    crime_map = (
+        alt.Chart(df_map.dropna(subset=["LAT", "LONG"]))
+        .mark_circle(size=35, opacity=0.5)
+        .encode(
+            longitude="LONG:Q",
+            latitude="LAT:Q",
+            color=alt.Color("DISTRICT:N", legend=None),
+            tooltip=[
+                alt.Tooltip("DISTRICT:N", title="District"),
+                alt.Tooltip("OFFENSE_DESCRIPTION:N", title="Crime Type"),
+                alt.Tooltip("DAY_OF_WEEK:N", title="Day of Week"),
+                alt.Tooltip("HOUR:Q", title="Hour of Day"),
+            ],
+        )
+        .properties(width="container", height=500)
+        .interactive()  # allows zooming & panning
+    )
+
+    st.altair_chart(crime_map, use_container_width=True)
+else:
+    st.warning("Latitude/Longitude columns not found in dataset.")
 
 
 # shooting analysis:
