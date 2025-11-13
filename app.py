@@ -4,7 +4,6 @@ import numpy as np
 import requests
 from datetime import datetime, timedelta
 import altair as alt
-import pydeck as pdk
 
 
 # streamlit setup:
