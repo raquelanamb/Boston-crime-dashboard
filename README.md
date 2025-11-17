@@ -41,15 +41,20 @@ Source: Boston Police Department Incident Reports
 ---
 
 **Running Locally**  
+
+1. Clone the repository
 ```bash
-# 1. Clone the repository
 git clone https://github.com/<your-username>/boston-crime-insights.git
 cd boston-crime-insights
+```
 
-# 2. Install dependencies
+2. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
-# 3. Run the app
+3. Run the app
+```bash
 streamlit run app.py
 ```
 ---
