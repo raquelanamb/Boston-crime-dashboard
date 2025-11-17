@@ -333,13 +333,13 @@ st.dataframe(df_f.head(500))
 
 
 # download button for user-filtered data:
+
 st.download_button(
     label="Download Filtered Data (CSV)",
     data=df_f.to_csv(index=False),
     file_name="boston_crime_filtered.csv",
     mime="text/csv"
 )
-
 
 # note to user footer:
 st.markdown("---")
