@@ -66,7 +66,7 @@ Data updates occur dynamically upon user access, ensuring near real-time accurac
 
 ---
 **References**
-- [City of Boston – BPD Crime Incident Reports: ](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system))
-- [CKAN Datastore API Documentation: ](https://docs.ckan.org/en/latest/maintaining/datastore.html)
-- [Streamlit Documentation: ](https://docs.streamlit.io)
-- [Altair Documentation: ](https://altair-viz.github.io)
+- [City of Boston – BPD Crime Incident Reports](https://data.boston.gov/dataset/crime-incident-reports-august-2015-to-date-source-new-system)
+- [CKAN Datastore API Documentation](https://docs.ckan.org/en/latest/maintaining/datastore.html)
+- [Streamlit Documentation](https://docs.streamlit.io)
+- [Altair Documentation](https://altair-viz.github.io)
