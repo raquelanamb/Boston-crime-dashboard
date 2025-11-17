@@ -1,5 +1,6 @@
 # Boston Crime Insights
 An interactive data visualization dashboard that explores over a decade of Boston Police Department incident reports (2015–present). The project automates data collection, cleaning, and visualization to make civic crime data more accessible, transparent, and actionable.
+----
 
 **Features**
 - Dynamic Filtering: Instantly filter incidents by Year, Crime Type, or Police District.
