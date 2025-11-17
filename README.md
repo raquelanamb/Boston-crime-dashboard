@@ -37,6 +37,7 @@ Source: Boston Police Department Incident Reports
 ---
 
 **Dashboard Preview**
+
 Below is a glimpse of the Boston Crime Insights dashboard, where users can filter, visualize, and download up-to-date crime data through clean, interactive charts and maps.
 <img width="1512" height="853" alt="Screenshot 2025-11-16 at 10 23 57 PM" src="https://github.com/user-attachments/assets/aa9cd916-25d5-45bb-8d82-83a2f999bb67" />
 
