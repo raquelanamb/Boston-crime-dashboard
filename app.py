@@ -236,7 +236,9 @@ col2.metric("Incidents This Month", f"{len(df_f[df_f['MONTH'] == datetime.now().
 col3.metric("Shooting Incidents", df_f["SHOOTING"].sum())
 
 # count of unique police districts in the filtered subset:
-col4.metric("Unique Districts", df_f["DISTRICT"].nunique())
+valid_districts = df_f["DISTRICT"].dropna()  # remove NaN
+valid_districts = valid_districts[~valid_districts.isin(["Outside of", "External"])]  # exclude non-district vals
+col4.metric("Unique Districts", valid_districts.nunique())
 
 # -------------------------------------------------------------------------------------------------------
 
