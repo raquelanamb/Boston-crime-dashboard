@@ -358,12 +358,33 @@ st.altair_chart(shoot_line, use_container_width=True)
 
 # -------------------------------------------------------------------------------------------------------
 
+# map BPD district codes to their corresponding areas:
+district_labels = {
+    "A1": "A1 (Downtown)",
+    "A15": "A15 (Charlestown)",
+    "A7": "A7 (East Boston)",
+    "B2": "B2 (Roxbury)",
+    "B3": "B3 (Mattapan)",
+    "C6": "C6 (South Boston)",
+    "C11": "C11 (Dorchester)",
+    "D4": "D4 (South End)",
+    "D14": "D14 (Brighton)",
+    "E5": "E5 (West Roxbury)",
+    "E13": "E13 (Jamaica Plain)",
+    "E18": "E18 (Hyde Park)"
+}
+
+# add new col w/ readable district labels for charts and tooltips:
+df_f_nodist["DISTRICT_LABEL"] = df_f_nodist["DISTRICT"].map(district_labels).fillna(df_f_nodist["DISTRICT"])
+
+# -------------------------------------------------------------------------------------------------------
+
 # crime by district:
 st.subheader("Crime by Police District")
 
 # count number of incidents for each district:
 by_district = (
-    df_f_nodist["DISTRICT"] # ignoring filter for district
+    df_f_nodist["DISTRICT_LABEL"] # ignoring filter for district
     .value_counts() # rank by freq, return Series
     .rename_axis("District") # rename the index to "District"
     .reset_index(name="Count") # turn it into a proper df with new col "Count" ("District" becomes a normal column)
@@ -374,7 +395,7 @@ district_chart = (
     alt.Chart(by_district)
     .mark_bar() # draw bars
     .encode(
-        y=alt.Y("District:N", sort="-x"), # (:N - Nominal, y-axis is districts)
+        y=alt.Y("District:N", title="District", sort="-x"), # (:N - Nominal, y-axis is districts)
         x=alt.X("Count:Q"), # (:Q - Quantitative, x-axis in the crime count for each)
         tooltip=["District", "Count"], # display exact values when hovering
     )
@@ -410,7 +431,7 @@ else:
             latitude="LAT:Q",
             color=alt.Color("DISTRICT:N", legend=None), # (:N - Nominal, color by district categories)
             tooltip=[ # details that show when user hovers: 
-                alt.Tooltip("DISTRICT:N", title="District"),
+                alt.Tooltip("DISTRICT_LABEL:N", title="District"),
                 alt.Tooltip("OFFENSE_DESCRIPTION:N", title="Crime Type"),
                 alt.Tooltip("DAY_OF_WEEK:N", title="Day of Week"),
                 alt.Tooltip("HOUR:Q", title="Hour of Day"),
