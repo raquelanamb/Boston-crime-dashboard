@@ -149,6 +149,9 @@ def load_data():
         # if API call fails, show warning but keep the cached data:
         st.warning(f"Could not fetch live data: {e}")
 
+    # ensure all incident numbers are strings for PyArrow serialization:
+    df["INCIDENT_NUMBER"] = df["INCIDENT_NUMBER"].astype(str)
+
     # return final combined & cleaned df:
     return df
 
