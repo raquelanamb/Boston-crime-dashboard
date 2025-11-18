@@ -23,7 +23,7 @@ API_URL = f"https://data.boston.gov/api/3/action/datastore_search?resource_id={R
 # -------------------------------------------------------------------------------------------------------
 
 # decorator func to cache load_data() results so Streamlit remembers it for 1 hr (3600 secs):
-@st.cache_data(ttl=3600, show_spinner=True)
+@st.cache_data(ttl=3600, show_spinner=True, max_entries=1)
 
 # loads, cleans, & merges Boston crime data from Oracle Cloud bucket + Boston’s live Data API, returns singular cleaned df:
 def load_data():
