@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 from datetime import datetime
 import altair as alt
+import gc
 
 
 # configure page title, layout width, & header text:
@@ -22,8 +23,8 @@ API_URL = f"https://data.boston.gov/api/3/action/datastore_search?resource_id={R
 
 # -------------------------------------------------------------------------------------------------------
 
-# decorator func to cache load_data() results so Streamlit remembers it for 1 hr (3600 secs):
-@st.cache_data(ttl=3600, show_spinner=True, max_entries=1, persist=True) # also set max cached versions = 1, save to disk
+# decorator func to cache load_data() results so Streamlit remembers it for 30 min (1800 secs):
+@st.cache_data(ttl=1800, show_spinner=True, max_entries=1) # also set max cached versions = 1
 
 # loads, cleans, & merges Boston crime data from Oracle Cloud bucket + Boston’s live Data API, returns singular cleaned df:
 def load_data():
@@ -54,6 +55,9 @@ def load_data():
             # append this year’s data to the list:
             dfs.append(df_y)
             # st.write(f"Loaded {fname}")
+
+            # force release of unused memory here:
+            gc.collect()
         
         # if file fails to load:
         except Exception as e:
@@ -66,6 +70,10 @@ def load_data():
 
     # combine all yearly dfs into 1 master df:
     df = pd.concat(dfs, ignore_index=True)
+
+    # force release of unused memory here:
+    dfs.clear()
+    gc.collect()
 
     # some 'OCCURRED_ON_DATE' values contain timezone suffixes (e.g., +00:00). removing them to avoid parsing errors:
     df["OCCURRED_ON_DATE"] = (
@@ -143,6 +151,10 @@ def load_data():
         if len(df_live):
             st.success(f"Added {len(df_live):,} new records from Boston live API")
             df = pd.concat([df, df_live], ignore_index=True) # ignore_index resets the row numbering so that it’s continuous
+
+            # force release of unused memory here:
+            del df_live
+            gc.collect()
 
     except Exception as e:
 
