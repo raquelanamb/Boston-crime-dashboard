@@ -19,7 +19,8 @@ st.subheader("(Explore official BPD data crime incident reports from 2015 to pre
 RESOURCE_ID = "b973d8cb-eeb2-4e7e-99da-c92938efc9c0"
 
 # construct API URL to retrieve <=500,000 records in JSON format:
-API_URL = f"https://data.boston.gov/api/3/action/datastore_search?resource_id={RESOURCE_ID}&limit=500000"
+API_URL = f"https://data.boston.gov/api/3/action/datastore_search_sql?sql=SELECT * FROM \"{RESOURCE_ID}\" ORDER BY \"OCCURRED_ON_DATE\" DESC LIMIT 50000"
+
 
 # -------------------------------------------------------------------------------------------------------
 
